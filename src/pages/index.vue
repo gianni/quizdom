@@ -2,7 +2,7 @@
   
   <div>
      
-    <!-- steps   -->
+    <!-- steps-->
     <div class="steps">
         <b-row>
             <b-col>
@@ -23,46 +23,16 @@
         </b-row>
     </div>
 
-    <div id="container" >
-
+    <div id="container">
         <div class="questions">
-            
-            <b-row>
+            <b-row v-for="(question, index) in questions" :key="question.id">
                 <b-col>
-                    <b-card id="step1" class="question" title="QUESTION 1" sub-title="Storia">
-                        <b-card-text>
-                            Di quale colore era il cavallo bianco di Napoleone?    
-                        </b-card-text>
-                        <b-row>
-                            <b-col class="text-right"> 
-                                <b-button @click="moveNext()">Procedi</b-button>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </b-col>
-            </b-row>
-            
-            <b-row>
-                <b-col>
-                    <b-card id="step2" class="question disabled" title="QUESTION 2" sub-title="Storia">
-                        <b-card-text>
-                            Di quale colore era il cavallo bianco di Napoleone?    
-                        </b-card-text>
-                        <b-row>
-                            <b-col class="text-right"> 
-                                <b-button @click="moveNext()">Procedi</b-button>
-                            </b-col>
-                        </b-row>
-                    </b-card>
-                </b-col>
-            </b-row>
+                    <b-card :id="`step${index}`" class="question" :title="`#${question.id} - ${question.text}`" :sub-title="question.topic">
 
-            <b-row>
-                <b-col>
-                    <b-card id="step3" class="question disabled2" title="QUESTION 3" sub-title="Storia">
-                        <b-card-text>
-                            Di quale colore era il cavallo bianco di Napoleone?    
-                        </b-card-text>
+                        <b-form-group label="Select the corret answer:">
+                            <b-form-radio v-for="(option, index) in question.options" :key="`option${option.id}`" v-model="answer" name="option" :value="index">{{option.text}}</b-form-radio>
+                        </b-form-group>
+
                         <b-row>
                             <b-col class="text-right"> 
                                 <b-button @click="moveNext()">Procedi</b-button>
@@ -71,9 +41,14 @@
                     </b-card>
                 </b-col>
             </b-row>
-                        
+            <b-row>
+                <b-col class="text-center">
+                    <b-card id="step3" class="question" title="" sub-title="">
+                        <h1>GOOD JOB!</h1>
+                    </b-card>
+                </b-col>
+            </b-row>
         </div>
-
     </div>
 
     
@@ -83,11 +58,15 @@
 
 <script>
 
+import Questions from '../data/questions.js';
+
 export default {
     name:'index',
     data: () => {
         return {
-            "currentStep":1
+            "questions":Questions,
+            "question":0,
+            "answer":''
         }
     },
     methods:{
@@ -98,7 +77,7 @@ export default {
                 easing: 'ease-in',
                 offset: -60,
                 force: true,
-                cancelable: true,
+                cancelable: false,
                 onStart: function(element) {
                     console.log('start',element);
                 },
@@ -112,8 +91,14 @@ export default {
                 y: true
             }
 
-            this.$data.currentStep += 1;
-            this.$scrollTo(`#step${this.$data.currentStep}`, 500, options)
+            if(this.$data.questions[this.$data.question].options[this.$data.answer].text == "Bianco"){
+                this.$data.question += 1;
+                this.$data.answer = '';
+                this.$scrollTo(`#step${this.$data.question}`, 500, options)
+            } else {
+                console.log('wrong answer')
+            }
+
         }
     }
 }
@@ -124,7 +109,7 @@ export default {
 #container{
     overflow: hidden;
     width:100%;
-    height:300px;
+    height:320px;
 }
 
 .steps{

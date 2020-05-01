@@ -1,0 +1,59 @@
+module.exports = [
+    {
+        "id":1,
+        "text":"Di quale colore era il cavallo bianco di Napoleone?",
+        "topic":"Storia",
+        "options":[
+            {
+                "id":1,
+                "text":"Marrone"
+            },
+            {
+                "id":2,
+                "text":"Nero"
+            },
+            {
+                "id":3,
+                "text":"Bianco"
+            }
+        ]
+    },
+    {
+        "id":2,
+        "text":"Quando sono in piedi loro sono sdraiati, quando sono sdraiato loro sono in piedi. Chi sono?",
+        "topic":"Storia",
+        "options":[
+            {
+                "id":1,
+                "text":"Uomini"
+            },
+            {
+                "id":2,
+                "text":"Bianco"
+            },
+            {
+                "id":3,
+                "text":"Donne"
+            }
+        ]
+    },
+    {
+        "id":3,
+        "text":"Di quale colore era il cavallo bianco di Napoleone?",
+        "topic":"Storia",
+        "options":[
+            {
+                "id":1,
+                "text":"Bianco"
+            },
+            {
+                "id":2,
+                "text":"Verde"
+            },
+            {
+                "id":3,
+                "text":"Grigio"
+            }
+        ]
+    }
+];
