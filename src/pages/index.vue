@@ -26,7 +26,7 @@
     <div id="container" :class="`container_${$mq}`">
         <div :class="`questions_${$mq}`">
             <div v-for="(question, index) in questions" :key="question.id">
-                    <b-card :id="`step${index}`" :class="`question_${$mq}`" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
+                    <b-card :id="`step${index}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
 
                         <b-form-group label="Select the corret answer:">
                             <b-form-radio v-for="(option, index) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="index">{{option.text}}</b-form-radio>
@@ -40,7 +40,7 @@
                     </b-card>
             </div>
             <div class="text-center">
-                <b-card id="step3" :class="`question_${$mq}`" title="" sub-title="">
+                <b-card id="step3" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
                     <h1>GOOD JOB!</h1>
                     <div>
                         <img :class="`restart_icon_${$mq}`" @click="restart()" src="../assets/arrow.png">
@@ -68,11 +68,19 @@ export default {
             "questions":Questions,
             "current":0,
             "answer":'',
-            "screenWidth":window.innerWidth
+            "screenWidth": window.innerWidth-20
         }
     },
     computed:{
-
+        cardWidth: function(){
+            if(this.$mq == "sm"){
+                return {
+                    width: window.innerWidth-20+"px"
+                }
+            } else {
+                return {}
+            }
+        }
     },
     methods:{
         moveNext : function(){
