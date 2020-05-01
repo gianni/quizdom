@@ -3,7 +3,7 @@
   <div>
      
     <!-- steps-->
-    <div class="steps">
+    <!-- <div class="steps">
         <b-row>
             <b-col>
                 <div class="step step1">WHO?</div>
@@ -21,16 +21,15 @@
                 <div class="step step5">SCORE</div>
             </b-col>
         </b-row>
-    </div>
+    </div> -->
 
-    <div id="container">
-        <div class="questions">
-            <b-row v-for="(question, index) in questions" :key="question.id">
-                <b-col>
-                    <b-card :id="`step${index}`" class="question" :title="`#${question.id} - ${question.text}`" :sub-title="question.topic">
+    <div id="container" :class="`container_${$mq}`">
+        <div :class="`questions_${$mq}`">
+            <div v-for="(question, index) in questions" :key="question.id">
+                    <b-card :id="`step${index}`" :class="`question_${$mq}`" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
 
                         <b-form-group label="Select the corret answer:">
-                            <b-form-radio v-for="(option, index) in question.options" :key="`option${option.id}`" v-model="answer" name="option" :value="index">{{option.text}}</b-form-radio>
+                            <b-form-radio v-for="(option, index) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="index">{{option.text}}</b-form-radio>
                         </b-form-group>
 
                         <b-row>
@@ -39,15 +38,16 @@
                             </b-col>
                         </b-row>
                     </b-card>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col class="text-center">
-                    <b-card id="step3" class="question" title="" sub-title="">
-                        <h1>GOOD JOB!</h1>
-                    </b-card>
-                </b-col>
-            </b-row>
+            </div>
+            <div class="text-center">
+                <b-card id="step3" :class="`question_${$mq}`" title="" sub-title="">
+                    <h1>GOOD JOB!</h1>
+                    <div>
+                        <img :class="`restart_icon_${$mq}`" @click="restart()" src="../assets/arrow.png">
+                    </div>
+                    <h3 @click="restart()" class="restart">Restart</h3>
+                </b-card>
+            </div>
         </div>
     </div>
 
@@ -59,46 +59,36 @@
 <script>
 
 import Questions from '../data/questions.js';
+import ScrollingConf from '../config/scrolling.js';
 
 export default {
     name:'index',
     data: () => {
         return {
             "questions":Questions,
-            "question":0,
-            "answer":''
+            "current":0,
+            "answer":'',
+            "screenWidth":window.innerWidth
         }
+    },
+    computed:{
+
     },
     methods:{
         moveNext : function(){
-
-            let options = {
-                container: '#container',
-                easing: 'ease-in',
-                offset: -60,
-                force: true,
-                cancelable: false,
-                onStart: function(element) {
-                    console.log('start',element);
-                },
-                onDone: function(element) {
-                    console.log('done',element);
-                },
-                onCancel: function() {
-                    console.log('cancelled');
-                },
-                x: false,
-                y: true
-            }
-
-            if(this.$data.questions[this.$data.question].options[this.$data.answer].text == "Bianco"){
-                this.$data.question += 1;
+            if(this.$data.questions[this.$data.current].options[this.$data.answer].text == "Bianco"){
+                this.$data.current += 1;
                 this.$data.answer = '';
-                this.$scrollTo(`#step${this.$data.question}`, 500, options)
+                this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf[this.$mq])
             } else {
                 console.log('wrong answer')
             }
 
+        },
+        restart : function(){
+            this.$data.current = 0;
+            this.$data.answer = '';
+            this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf[this.$mq])
         }
     }
 }
@@ -106,7 +96,11 @@ export default {
 
 <style scoped>
 
-#container{
+.container_sm{
+    overflow: hidden;
+}
+
+.container_lg{
     overflow: hidden;
     width:100%;
     height:320px;
@@ -128,13 +122,39 @@ export default {
     margin:auto;
 }
 
-.questions{
+.questions_sm{
+    width: 5000px;
+}
+
+.questions_lg{
     margin-top:30px;
     margin-bottom:30px;
 }
 
-.question{
+.question_sm{
+    width: 340px;
+    float:left;
+    margin-right:100px;
+}
+
+.question_lg{
     margin-bottom:100px;
+    height:400px;
+}
+
+.restart{
+    cursor: pointer;
+}
+
+.restart_icon_lg{
+    cursor: pointer;
+    transform: rotate(90deg);
+    margin-top: 30px;
+}
+
+.restart_icon_sm{
+    cursor: pointer;
+    margin-top: 30px;
 }
 
 

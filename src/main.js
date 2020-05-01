@@ -6,6 +6,7 @@ import App from './App.vue'
 
 import './plugins/bootstrap-vue'
 import './plugins/scrollto-vue'
+import './plugins/mq'
 import router from './plugins/router-vue'
 
 Vue.config.productionTip = false
