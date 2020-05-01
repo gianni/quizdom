@@ -1,4 +1,4 @@
-# quizdom
+# QuizDOM
 
 ## Project setup
 ```

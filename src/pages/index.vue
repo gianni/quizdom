@@ -23,53 +23,56 @@
         </b-row>
     </div>
 
-    <div class="container">
+    <div id="container" >
 
-    <!-- question -->
-    <div class="questions">
-        <b-row>
-            <b-col>
-                <b-card class="question" title="QUESTION 1" sub-title="Storia">
-                    <b-card-text>
-                        Di quale colore era il cavallo bianco di Napoleone?    
-                    </b-card-text>
-                    <b-row>
-                        <b-col class="text-right"> 
-                            <b-button>Procedi</b-button>
-                        </b-col>
-                    </b-row>
-                </b-card>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col>
-                <b-card class="question disabled" title="QUESTION 1" sub-title="Storia">
-                    <b-card-text>
-                        Di quale colore era il cavallo bianco di Napoleone?    
-                    </b-card-text>
-                    <b-row>
-                        <b-col class="text-right"> 
-                            <b-button>Procedi</b-button>
-                        </b-col>
-                    </b-row>
-                </b-card>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col>
-                <b-card class="question disabled" title="QUESTION 1" sub-title="Storia">
-                    <b-card-text>
-                        Di quale colore era il cavallo bianco di Napoleone?    
-                    </b-card-text>
-                    <b-row>
-                        <b-col class="text-right"> 
-                            <b-button>Procedi</b-button>
-                        </b-col>
-                    </b-row>
-                </b-card>
-            </b-col>
-        </b-row>            
-    </div>
+        <div class="questions">
+            
+            <b-row>
+                <b-col>
+                    <b-card id="step1" class="question" title="QUESTION 1" sub-title="Storia">
+                        <b-card-text>
+                            Di quale colore era il cavallo bianco di Napoleone?    
+                        </b-card-text>
+                        <b-row>
+                            <b-col class="text-right"> 
+                                <b-button @click="moveNext()">Procedi</b-button>
+                            </b-col>
+                        </b-row>
+                    </b-card>
+                </b-col>
+            </b-row>
+            
+            <b-row>
+                <b-col>
+                    <b-card id="step2" class="question disabled" title="QUESTION 2" sub-title="Storia">
+                        <b-card-text>
+                            Di quale colore era il cavallo bianco di Napoleone?    
+                        </b-card-text>
+                        <b-row>
+                            <b-col class="text-right"> 
+                                <b-button @click="moveNext()">Procedi</b-button>
+                            </b-col>
+                        </b-row>
+                    </b-card>
+                </b-col>
+            </b-row>
+
+            <b-row>
+                <b-col>
+                    <b-card id="step3" class="question disabled2" title="QUESTION 3" sub-title="Storia">
+                        <b-card-text>
+                            Di quale colore era il cavallo bianco di Napoleone?    
+                        </b-card-text>
+                        <b-row>
+                            <b-col class="text-right"> 
+                                <b-button @click="moveNext()">Procedi</b-button>
+                            </b-col>
+                        </b-row>
+                    </b-card>
+                </b-col>
+            </b-row>
+                        
+        </div>
 
     </div>
 
@@ -79,12 +82,51 @@
 </template>
 
 <script>
+
 export default {
-    name:'index'
+    name:'index',
+    data: () => {
+        return {
+            "currentStep":1
+        }
+    },
+    methods:{
+        moveNext : function(){
+
+            let options = {
+                container: '#container',
+                easing: 'ease-in',
+                offset: -60,
+                force: true,
+                cancelable: true,
+                onStart: function(element) {
+                    console.log('start',element);
+                },
+                onDone: function(element) {
+                    console.log('done',element);
+                },
+                onCancel: function() {
+                    console.log('cancelled');
+                },
+                x: false,
+                y: true
+            }
+
+            this.$data.currentStep += 1;
+            this.$scrollTo(`#step${this.$data.currentStep}`, 500, options)
+        }
+    }
 }
 </script>
 
 <style scoped>
+
+#container{
+    overflow: hidden;
+    width:100%;
+    height:300px;
+}
+
 .steps{
     margin-top:30px;
     margin-bottom:30px;
@@ -107,11 +149,7 @@ export default {
 }
 
 .question{
-    margin-bottom:30px;
-}
-
-.disabled{
-    opacity: 0.5;
+    margin-bottom:100px;
 }
 
 

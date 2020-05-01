@@ -5,6 +5,7 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import './plugins/bootstrap-vue'
+import './plugins/scrollto-vue'
 import router from './plugins/router-vue'
 
 Vue.config.productionTip = false
