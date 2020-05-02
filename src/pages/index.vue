@@ -1,43 +1,18 @@
 <template> 
-  
-  <div>
-     
-    <!-- steps-->
-    <!-- <div class="steps">
-        <b-row>
-            <b-col>
-                <div class="step step1">WHO?</div>
-            </b-col>
-            <b-col>
-                <div class="step step2">A</div>
-            </b-col>
-            <b-col>
-                <div class="step step3">B</div>
-            </b-col>
-            <b-col>
-                <div class="step step4">C</div>
-            </b-col>
-            <b-col>
-                <div class="step step5">SCORE</div>
-            </b-col>
-        </b-row>
-    </div> -->
-
     <div id="container" :class="`container_${$mq}`">
         <div :class="`questions_${$mq}`">
             <div v-for="(question, index) in questions" :key="question.id">
-                    <b-card :id="`step${index}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
-
-                        <b-form-group label="Select the corret answer:">
-                            <b-form-radio v-for="(option, index) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="index">{{option.text}}</b-form-radio>
-                        </b-form-group>
-
-                        <b-row>
-                            <b-col class="text-right"> 
-                                <b-button @click="moveNext()">Procedi</b-button>
-                            </b-col>
-                        </b-row>
-                    </b-card>
+                <b-card :id="`step${index}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
+                    <hr>
+                    <b-form-group label="Seleziona la risposta corretta:">
+                        <b-form-radio v-for="(option) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="option.id">{{option.text}}</b-form-radio>
+                    </b-form-group>
+                    <b-row>
+                        <b-col class="text-right"> 
+                            <b-button @click="validate()">Procedi</b-button>
+                        </b-col>
+                    </b-row>
+                </b-card>
             </div>
             <div class="text-center">
                 <b-card id="step3" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
@@ -50,14 +25,11 @@
             </div>
         </div>
     </div>
-
-    
-  </div>
-
 </template>
 
 <script>
 
+import axios from 'axios'
 import Questions from '../data/questions.js';
 import ScrollingConf from '../config/scrolling.js';
 
@@ -68,7 +40,8 @@ export default {
             "questions":Questions,
             "current":0,
             "answer":'',
-            "screenWidth": window.innerWidth-20
+            "screenWidth": window.innerWidth-20,
+            "attemps": 0
         }
     },
     computed:{
@@ -83,20 +56,36 @@ export default {
         }
     },
     methods:{
-        moveNext : function(){
-            if(this.$data.questions[this.$data.current].options[this.$data.answer].text == "Bianco"){
-                this.$data.current += 1;
-                this.$data.answer = '';
-                this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf[this.$mq])
-            } else {
-                console.log('wrong answer')
-            }
+        validate : function(){
+            this.$data.attemps+=1
+            let _this = this
+
+            axios.post(`http://localhost:9900/question/check`,{
+                question: this.$data.questions[this.$data.current].id,
+                answer: this.$data.answer
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (response) {
+
+                if(response.data.answer == "ok"){
+                    _this.$data.current += 1;
+                    _this.$data.answer = '';
+                    _this.$scrollTo(`#step${_this.$data.current}`, 500, ScrollingConf(_this.$mq))
+                }
+
+            }).catch(function(e){
+                console.error('Verify that the server is running')
+                console.log('In new shell type: "yarn run backend" and retry!')
+                console.log('Exception: ', e)
+            });
 
         },
         restart : function(){
             this.$data.current = 0;
             this.$data.answer = '';
-            this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf[this.$mq])
+            this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf(this.$mq))
         }
     }
 }
@@ -112,22 +101,6 @@ export default {
     overflow: hidden;
     width:100%;
     height:320px;
-}
-
-.steps{
-    margin-top:30px;
-    margin-bottom:30px;
-    text-align:center;
-}
-
-.step{
-    width:100px;
-    height:50px;
-    background-color:#AFE3C0;
-    border-radius: 20px;
-    padding:20px;
-    line-height: 15px;
-    margin:auto;
 }
 
 .questions_sm{
@@ -163,27 +136,6 @@ export default {
 .restart_icon_sm{
     cursor: pointer;
     margin-top: 30px;
-}
-
-
-.step1{
-    background-color: #d34e18;
-}
-
-.step2{
-    background-color: #8963BA;
-}
-
-.step3{
-    background-color: #AA4465;
-}
-
-.step4{
-    background-color: #d34e18;
-}
-
-.step5{
-    background-color: #8963BA;
 }
 
 

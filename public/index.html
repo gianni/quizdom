@@ -6,8 +6,21 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      body{
+        background: linear-gradient(160deg, rgba(28,176,162,1) 19%, rgba(69,252,90,1) 50%, rgba(93,58,180,1) 94%);
+        background-size: cover;
+        background-size: 2000px 1200px;
+      }
+
+      @media only screen and (max-width: 600px) {
+        body{
+          background-size: 1000px 800px;        
+        }
+      }
+    </style>
   </head>
-  <body style="background-color: #65c13b;">
+  <body>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

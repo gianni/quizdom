@@ -16,7 +16,8 @@ module.exports = [
                 "id":3,
                 "text":"Bianco"
             }
-        ]
+        ],
+        "answer":3
     },
     {
         "id":2,
@@ -29,13 +30,14 @@ module.exports = [
             },
             {
                 "id":2,
-                "text":"Bianco"
+                "text":"Piedi"
             },
             {
                 "id":3,
                 "text":"Donne"
             }
-        ]
+        ],
+        "answer":2
     },
     {
         "id":3,
@@ -54,6 +56,7 @@ module.exports = [
                 "id":3,
                 "text":"Grigio"
             }
-        ]
+        ],
+        "answer":1
     }
 ];
