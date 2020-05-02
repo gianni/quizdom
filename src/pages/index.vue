@@ -16,7 +16,9 @@
             </div>
             <div class="text-center">
                 <b-card id="step3" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
-                    <h1>GOOD JOB!</h1>
+                    <h4>Quiz completato</h4>
+                    <h1>Il tuo punteggio è</h1>
+                    <h1 class="score">{{score}}</h1>
                     <div>
                         <img :class="`restart_icon_${$mq}`" @click="restart()" src="../assets/arrow.png">
                     </div>
@@ -41,7 +43,8 @@ export default {
             "current":0,
             "answer":'',
             "screenWidth": window.innerWidth-20,
-            "attemps": 0
+            "attemps": 0,
+            "score": 0
         }
     },
     computed:{
@@ -73,17 +76,22 @@ export default {
                     _this.$data.current += 1;
                     _this.$data.answer = '';
                     _this.$scrollTo(`#step${_this.$data.current}`, 500, ScrollingConf(_this.$mq))
+                    _this.$data.score = Math.floor(100 * _this.$data.questions.length / _this.$data.attemps)
                 }
 
-            }).catch(function(e){
-                console.error('Verify that the server is running')
-                console.log('In new shell type: "yarn run backend" and retry!')
-                console.log('Exception: ', e)
+            }).catch(function(exception){
+                if(exception.message == 'Network Error') {
+                    console.error('Verify that the server is running ...')
+                    console.log('In new shell type: "yarn run backend" and retry!')
+                } else {
+                    console.log('Exception: ', exception)
+                }
             });
 
         },
         restart : function(){
             this.$data.current = 0;
+            this.$data.score = 0;
             this.$data.answer = '';
             this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf(this.$mq))
         }
@@ -130,12 +138,15 @@ export default {
 .restart_icon_lg{
     cursor: pointer;
     transform: rotate(90deg);
-    margin-top: 30px;
 }
 
 .restart_icon_sm{
     cursor: pointer;
-    margin-top: 30px;
+}
+
+.score{
+    color: #b71f1f;
+    font-weight:bold;
 }
 
 
