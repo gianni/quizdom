@@ -2,23 +2,47 @@
     <div>
         <div id="container" :class="`container_${$mq}`">
             <div :class="`questions_${$mq}`">
+
+                <!-- name slide -->
+                <div class="text-center">
+                    <b-card id="step0" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
+                        <b-form-group label="Inserisci il tuo nome">
+                                <b-form-input v-model="name"
+                                    :state="validName"
+                                    aria-describedby="input-live-feedback"
+                                    trim
+                                ></b-form-input>
+                                <b-form-invalid-feedback id="input-live-feedback">Inserisci almeno 3 lettere</b-form-invalid-feedback>
+                        </b-form-group>
+                        <b-row>
+                            <b-col class="text-right"> 
+                                <b-button @click="validateName()">Procedi</b-button>
+                            </b-col>
+                        </b-row>
+
+                    </b-card>
+                </div>
+
+                <!-- questions slides-->
                 <div v-for="(question, index) in questions" :key="question.id">
-                    <b-card :id="`step${index}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
+                    <b-card :id="`step${index+1}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
                         <hr>
                         <b-form-group label="Seleziona la risposta corretta:">
                             <b-form-radio v-for="(option) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="option.id">{{option.text}}</b-form-radio>
                         </b-form-group>
                         <b-row>
                             <b-col class="text-right"> 
-                                <b-button @click="validate()">Procedi</b-button>
+                                <b-button @click="validate(question.id)">Procedi</b-button>
                             </b-col>
                         </b-row>
                     </b-card>
                 </div>
+
+                <!-- result slide -->
                 <div class="text-center">
-                    <b-card :id="'step'+questions.length" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
+                    <b-card :id="'step'+parseInt(questions.length+1)" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
                         <h4>Quiz completato!</h4>
-                        <h1>Il tuo punteggio è</h1>
+                        <h1><span class="nickname">{{name | capitalize}}</span> il tuo punteggio è</h1>
                         <h1 class="score">{{score}}</h1>
                         <div>
                             <img :class="`restart_icon_${$mq}`" @click="restart()" src="../assets/arrow.png">
@@ -26,6 +50,7 @@
                         <h3 @click="restart()" class="restart">Gioca ancora</h3>
                     </b-card>
                 </div>
+
             </div>
         </div>
         <b-alert :show="wrongAnswer" variant="danger">Risposta errata! Riprova!</b-alert>
@@ -48,7 +73,9 @@ export default {
             "screenWidth": window.innerWidth-20,
             "attemps": 0,
             "score": 0,
-            "wrongAnswer": false
+            "wrongAnswer": false,
+            "name":"",
+            "validName": false
         }
     },
     computed:{
@@ -63,13 +90,44 @@ export default {
         }
     },
     methods:{
-        validate : function(){
+        validateName: function(){
+
+            let _this = this
+            axios.post(`http://localhost:9900/name`,{
+                name: this.$data.name
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (response) {
+
+                if(response.data.validated == "ok"){
+                    _this.$data.validName=true
+                    setTimeout(function(){
+                        _this.$data.current += 1;
+                        _this.$scrollTo(`#step${_this.$data.current}`, 500, ScrollingConf(_this.$mq))
+                    },1000)
+                } else {
+                    _this.$data.validName=false
+                }
+
+            }).catch(function(exception){
+                if(exception.message == 'Network Error') {
+                    console.error('Verify that the server is running ...')
+                    console.log('In new shell type: "yarn run backend" and retry!')
+                } else {
+                    console.log('Exception: ', exception)
+                }
+            });
+      
+        },
+        validate : function(question_id){
             this.$data.attemps+=1
             this.$data.wrongAnswer=false
             let _this = this
 
             axios.post(`http://localhost:9900/question/check`,{
-                question: this.$data.questions[this.$data.current].id,
+                question: question_id,
                 answer: this.$data.answer
             }, {
                 headers: {
@@ -101,6 +159,13 @@ export default {
             this.$data.score = 0;
             this.$data.answer = '';
             this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf(this.$mq))
+        }
+    },
+    filters: {
+        capitalize: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
         }
     }
 }
@@ -153,7 +218,7 @@ export default {
     cursor: pointer;
 }
 
-.score{
+.score, .nickname{
     color: #b71f1f;
     font-weight:bold;
 }

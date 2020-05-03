@@ -24,6 +24,16 @@ app.get('/questions', function(req, res) {
     res.json(questions);
 });
 
+
+app.post('/name', function(req, res) {
+    if(req.body.name.length > 2){
+        res.json({"validated":"ok"});
+    } else {
+        res.json({"validated":"ko"});
+    }
+});
+
+
 app.post('/question/check', function(req, res) {
 
     let result={
