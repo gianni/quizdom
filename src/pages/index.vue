@@ -25,7 +25,7 @@
 
                 <!-- questions slides-->
                 <div v-for="(question, index) in questions" :key="question.id">
-                    <b-card :id="`step${index+1}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
+                    <b-card :id="`step${index+1}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="'Autore: '+question.author">
                         <hr>
                         <b-form-group label="Seleziona la risposta corretta:">
                             <b-form-radio v-for="(option) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="option.id">{{option.text}}</b-form-radio>

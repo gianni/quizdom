@@ -1,20 +1,20 @@
 module.exports = [
     {
         "id":1,
-        "text":"Di quale colore era il cavallo bianco di Napoleone?",
-        "topic":"Storia",
+        "text":"Il sig. Rossi ha 4 figli, ogni figlia ha un fratello. Quanti figli ha il sig. Rossi?",
+        "author":"Francesco",
         "options":[
             {
                 "id":1,
-                "text":"Marrone"
+                "text":"4"
             },
             {
                 "id":2,
-                "text":"Nero"
+                "text":"7"
             },
             {
                 "id":3,
-                "text":"Bianco"
+                "text":"5"
             }
         ],
         "answer":3
@@ -22,11 +22,11 @@ module.exports = [
     {
         "id":2,
         "text":"Quando sono in piedi loro sono sdraiati, quando sono sdraiato loro sono in piedi. Chi sono?",
-        "topic":"Storia",
+        "author":"Matteo",
         "options":[
             {
                 "id":1,
-                "text":"Uomini"
+                "text":"Sedie"
             },
             {
                 "id":2,
@@ -34,27 +34,27 @@ module.exports = [
             },
             {
                 "id":3,
-                "text":"Donne"
+                "text":"Gatti"
             }
         ],
         "answer":2
     },
     {
         "id":3,
-        "text":"Di quale colore era il cavallo bianco di Napoleone?",
-        "topic":"Storia",
+        "text":"Da piccoli camminano su 4 zampe, da adulti su 2 e da vecchi su 3. Chi sono?",
+        "author":"Davide",
         "options":[
             {
                 "id":1,
-                "text":"Bianco"
+                "text":"Uomini"
             },
             {
                 "id":2,
-                "text":"Verde"
+                "text":"Fenicotteri"
             },
             {
                 "id":3,
-                "text":"Grigio"
+                "text":"Serpenti"
             }
         ],
         "answer":1
