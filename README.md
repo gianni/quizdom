@@ -1,24 +1,37 @@
 # QuizDOM
 
-## Project setup
+## Setup
+
+### Frontend 
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Backend
+```
+cd backend
+```
+
+```
+yarn install
+```
+
+## Start application
+
+### Frontend
+```
+cd ..
+```
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
+### Backend
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
+yarn run backend
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Open in the browser
+```
+http://localhost:8080
+```
