@@ -10,9 +10,6 @@ yarn install
 ### Backend
 ```
 cd backend
-```
-
-```
 yarn install
 ```
 
@@ -21,8 +18,6 @@ yarn install
 ### Frontend
 ```
 cd ..
-```
-```
 yarn serve
 ```
 
