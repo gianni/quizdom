@@ -1,31 +1,34 @@
 <template> 
-    <div id="container" :class="`container_${$mq}`">
-        <div :class="`questions_${$mq}`">
-            <div v-for="(question, index) in questions" :key="question.id">
-                <b-card :id="`step${index}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
-                    <hr>
-                    <b-form-group label="Seleziona la risposta corretta:">
-                        <b-form-radio v-for="(option) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="option.id">{{option.text}}</b-form-radio>
-                    </b-form-group>
-                    <b-row>
-                        <b-col class="text-right"> 
-                            <b-button @click="validate()">Procedi</b-button>
-                        </b-col>
-                    </b-row>
-                </b-card>
-            </div>
-            <div class="text-center">
-                <b-card id="step3" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
-                    <h4>Quiz completato</h4>
-                    <h1>Il tuo punteggio è</h1>
-                    <h1 class="score">{{score}}</h1>
-                    <div>
-                        <img :class="`restart_icon_${$mq}`" @click="restart()" src="../assets/arrow.png">
-                    </div>
-                    <h3 @click="restart()" class="restart">Restart</h3>
-                </b-card>
+    <div>
+        <div id="container" :class="`container_${$mq}`">
+            <div :class="`questions_${$mq}`">
+                <div v-for="(question, index) in questions" :key="question.id">
+                    <b-card :id="`step${index}`" :class="`question_${$mq}`" v-bind:style="cardWidth" :title="`#${question.id} / ${questions.length} - ${question.text}`" :sub-title="question.topic">
+                        <hr>
+                        <b-form-group label="Seleziona la risposta corretta:">
+                            <b-form-radio v-for="(option) in question.options" :key="`option${question.id}-${option.id}`" v-model="answer" :name="`option${question.id}-${option.id}`" :value="option.id">{{option.text}}</b-form-radio>
+                        </b-form-group>
+                        <b-row>
+                            <b-col class="text-right"> 
+                                <b-button @click="validate()">Procedi</b-button>
+                            </b-col>
+                        </b-row>
+                    </b-card>
+                </div>
+                <div class="text-center">
+                    <b-card :id="'step'+questions.length" :class="`question_${$mq}`" v-bind:style="cardWidth" title="" sub-title="">
+                        <h4>Quiz completato!</h4>
+                        <h1>Il tuo punteggio è</h1>
+                        <h1 class="score">{{score}}</h1>
+                        <div>
+                            <img :class="`restart_icon_${$mq}`" @click="restart()" src="../assets/arrow.png">
+                        </div>
+                        <h3 @click="restart()" class="restart">Gioca ancora</h3>
+                    </b-card>
+                </div>
             </div>
         </div>
+        <b-alert :show="wrongAnswer" variant="danger">Risposta errata! Riprova!</b-alert>
     </div>
 </template>
 
@@ -44,7 +47,8 @@ export default {
             "answer":'',
             "screenWidth": window.innerWidth-20,
             "attemps": 0,
-            "score": 0
+            "score": 0,
+            "wrongAnswer": false
         }
     },
     computed:{
@@ -61,6 +65,7 @@ export default {
     methods:{
         validate : function(){
             this.$data.attemps+=1
+            this.$data.wrongAnswer=false
             let _this = this
 
             axios.post(`http://localhost:9900/question/check`,{
@@ -77,6 +82,8 @@ export default {
                     _this.$data.answer = '';
                     _this.$scrollTo(`#step${_this.$data.current}`, 500, ScrollingConf(_this.$mq))
                     _this.$data.score = Math.floor(100 * _this.$data.questions.length / _this.$data.attemps)
+                } else {
+                    _this.$data.wrongAnswer=true
                 }
 
             }).catch(function(exception){
@@ -103,6 +110,7 @@ export default {
 
 .container_sm{
     overflow: hidden;
+    height:400px;
 }
 
 .container_lg{
@@ -113,6 +121,7 @@ export default {
 
 .questions_sm{
     width: 5000px;
+    height:400px;
 }
 
 .questions_lg{
