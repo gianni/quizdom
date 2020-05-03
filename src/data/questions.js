@@ -1,7 +1,7 @@
 module.exports = [
     {
         "id":1,
-        "text":"Il sig. Rossi ha 4 figli, ogni figlia ha un fratello. Quanti figli ha il sig. Rossi?",
+        "text":"Il Sig. Rossi ha 4 figlie, ogni figlia ha un fratello. Quanti figli ha in totale?",
         "author":"Francesco",
         "options":[
             {
@@ -26,15 +26,15 @@ module.exports = [
         "options":[
             {
                 "id":1,
-                "text":"Sedie"
+                "text":"Le sedie"
             },
             {
                 "id":2,
-                "text":"Piedi"
+                "text":"I piedi"
             },
             {
                 "id":3,
-                "text":"Gatti"
+                "text":"I gatti"
             }
         ],
         "answer":2

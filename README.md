@@ -26,7 +26,7 @@ yarn serve
 yarn run backend
 ```
 
-### Open in the browser
+### Finally navigate to
 ```
 http://localhost:8080
 ```

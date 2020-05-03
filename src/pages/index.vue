@@ -156,6 +156,7 @@ export default {
         },
         restart : function(){
             this.$data.current = 0;
+            this.$data.attemps = 0;
             this.$data.score = 0;
             this.$data.answer = '';
             this.$scrollTo(`#step${this.$data.current}`, 500, ScrollingConf(this.$mq))
